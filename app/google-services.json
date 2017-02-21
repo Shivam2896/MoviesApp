@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "390497764703",
+    "firebase_url": "https://moviesapp-61ac3.firebaseio.com",
+    "project_id": "moviesapp-61ac3",
+    "storage_bucket": "moviesapp-61ac3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390497764703:android:a5225078d9beb718",
+        "android_client_info": {
+          "package_name": "com.example.dell.moviesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390497764703-g0rp1d5jogv265ngktocprmb2uvsj54a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dell.moviesapp",
+            "certificate_hash": "15725853cdb07b6920a90ca5779cfef78e1cafdc"
+          }
+        },
+        {
+          "client_id": "390497764703-3cg6b3uhqttve75qv2lhv5l8mjp7fkv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6mHx-_PJgwzn5fGk1rscEP-eUgqp-RrM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390497764703-3cg6b3uhqttve75qv2lhv5l8mjp7fkv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
