@@ -16,7 +16,7 @@ public class RatedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(
-                R.layout.recycler_view, container, false);
+                R.layout.grid_view, container, false);
 
         ContentAdapter adapter = new ContentAdapter();
         recyclerView.setAdapter(adapter);

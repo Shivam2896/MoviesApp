@@ -38,15 +38,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public final String LOG_TAG = SyncAdapter.class.getSimpleName();
 
-    String BASE_URL = "http://api.themoviedb.org/3/movie/popular/";
+    String BASE_POPULAR_URL = "http://api.themoviedb.org/3/movie/popular/";
+    String BASE_RATED_URL = "http://api.themoviedb.org/3/movie/top_rated/";
+
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w342/";
 
+    public String sortBy;
+
     // Interval at which to sync with the movies, in seconds.
-    // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60;
+    // 60 seconds (1 minute) * 60 mins (1 hour) * 24 hours = 1 day
+    public static final int SYNC_INTERVAL = 60 * 60 * 24;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-    private static final int NOTIFICATION_ID = 3004;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -65,7 +68,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             final String API_KEY = "api_key";
 
-            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+            Uri builtUri = Uri.parse(BASE_POPULAR_URL).buildUpon()
 //                    .appendEncodedPath(sortBy)
                     .appendQueryParameter(API_KEY, BuildConfig.API_KEY)
                     .build();
@@ -73,6 +76,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             URL url = new URL(builtUri.toString());
 
             Log.e(LOG_TAG, "" + url);
+
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -145,6 +149,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 double id = curResult.getDouble(MOVIE_ID);
                 String name = curResult.getString(TITLE);
+                double popularity = curResult.getDouble(POPULARITY);
+                double vote = curResult.getDouble(RATING);
 
                 String getURL = curResult.getString(POSTER_PATH);
                 String posterPath = BASE_POSTER_URL + getURL;
@@ -153,11 +159,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues movieValues = new ContentValues();
 
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, id);
-                Log.e(LOG_TAG, "" + id);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, name);
-                Log.e(LOG_TAG, "" + name);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER, posterPath);
-                Log.e(LOG_TAG, "" + posterPath);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY, popularity);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE, vote);
 
                 cVVector.add(movieValues);
             }
@@ -184,7 +189,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-    public static void initializeSyncAdapter (Context context) {
+    public static void initializeSyncAdapter (Context context, String sorting) {
         getSyncAccount(context);
     }
 

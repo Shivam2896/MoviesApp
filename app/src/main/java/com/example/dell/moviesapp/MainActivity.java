@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     private String mUsername;
     private String mPhotoUrl;
+    private String sorting = "popular";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -78,15 +79,31 @@ public class MainActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        SyncAdapter.initializeSyncAdapter(this);
+        SyncAdapter.initializeSyncAdapter(this, sorting);
     }
 
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new PopularFragment(), "Popular");
-        adapter.addFragment(new RatedFragment(), "Top Rated");
-        adapter.addFragment(new FavouriteFragment(), "Favourites");
+
+        GridFragment popular = new GridFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.fragment_data_key), "popular");
+        popular.setArguments(bundle);
+        adapter.addFragment(popular, "Popular");
+
+        GridFragment rated = new GridFragment();
+        bundle = new Bundle();
+        bundle.putString(getString(R.string.fragment_data_key), "top_rated");
+        rated.setArguments(bundle);
+        adapter.addFragment(rated, "Top Rated");
+
+        GridFragment favourite = new GridFragment();
+        bundle = new Bundle();
+        bundle.putString(getString(R.string.fragment_data_key), "favourites");
+        favourite.setArguments(bundle);
+        adapter.addFragment(favourite, "Favourites");
+
         viewPager.setAdapter(adapter);
     }
 

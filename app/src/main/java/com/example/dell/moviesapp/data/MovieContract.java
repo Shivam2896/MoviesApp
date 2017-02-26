@@ -42,6 +42,8 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_TRAILER = "trailer";
         public static final String COLUMN_MOVIE_REVIEW = "review";
         public static final String COLUMN_MOVIE_FAVORITES = "favorites";
+        public static final String BACKDROP_PATH = "backdrop_path";
+
 
         public static Uri buildMovieUri (long id){
             return ContentUris.withAppendedId(CONTENT_URI,id);

@@ -4,4 +4,5 @@
     <string name="sign_in">Sign In</string>
     <string name="content_authority">com.example.dell.moviesapp</string>
     <string name="sync_account_type">moviesapp.example.com</string>
+    <string name="fragment_data_key">Sort</string>
 </resources>
