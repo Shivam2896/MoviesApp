@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="335dp"
+    android:layout_height="330dp"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/movie_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Palais garnier"
                 android:layout_marginLeft="8dp"
@@ -37,34 +37,17 @@
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:textSize="18dp"
-                android:fontFamily="sans-serif"
-                android:layout_weight="4"/>
+                android:fontFamily="sans-serif" />
 
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                >
-
-                <ImageButton
-                    android:id="@+id/favourite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
-                    android:layout_marginRight="4dp"
-                    android:src="@drawable/ic_favorite_border_black_24dp"
-                    android:background="#FFFFFF"
-                    android:layout_gravity="end"/>
-            </FrameLayout>
         </LinearLayout>
 
         <TextView
-            android:id="@+id/genre"
+            android:id="@+id/movie_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Action, Adventure, Fantasy, Mystery, Science Fiction, Thriller"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:textSize="11dp"/>

@@ -20,10 +20,12 @@ public class ImageAdapter extends CursorAdapter {
     private static class ViewHolder {
         public final ImageView moviePoster;
         public final TextView movieTitle;
+        public final TextView movieGenre;
 
         public ViewHolder(View view){
             moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
             movieTitle = (TextView) view.findViewById(R.id.movie_name);
+            movieGenre = (TextView) view.findViewById(R.id.movie_genre);
         }
     }
 
@@ -44,10 +46,13 @@ public class ImageAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        String posterPath = cursor.getString(GridFragment.COL_MOVIE_POSTER);
-        String movieName = cursor.getString(GridFragment.COL_MOVIE_NAME);
+
+        String posterPath = cursor.getString(PopularFragment.COL_MOVIE_POSTER);
+        String movieName = cursor.getString(PopularFragment.COL_MOVIE_NAME);
+        String movieGenre = cursor.getString(PopularFragment.COL_GENRES);
 
         viewHolder.movieTitle.setText(movieName);
+        viewHolder.movieGenre.setText(movieGenre);
 
         Picasso.with(context)
                 .load(posterPath)

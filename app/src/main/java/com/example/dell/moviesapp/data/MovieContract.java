@@ -41,8 +41,10 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_VOTE = "vote";
         public static final String COLUMN_MOVIE_TRAILER = "trailer";
         public static final String COLUMN_MOVIE_REVIEW = "review";
+        public static final String COLUMN_MOVIE_BACKDROP = "backdrop_path";
+        public static final String COLUMN_MOVIE_CERTIFICATE = "adult";
+        public static final String COLUMN_GENRES = "genre_ids";
         public static final String COLUMN_MOVIE_FAVORITES = "favorites";
-        public static final String BACKDROP_PATH = "backdrop_path";
 
 
         public static Uri buildMovieUri (long id){
@@ -71,6 +73,5 @@ public class MovieContract {
         public static Long getMovieIdFromUri(Uri uri){
             return Long.parseLong(uri.getPathSegments().get(1));
         }
-
     }
 }

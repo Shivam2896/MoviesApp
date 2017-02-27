@@ -27,8 +27,16 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL,"
                 + MovieContract.MovieEntry.COLUMN_MOVIE_POSTER + " TEXT NOT NULL,"
                 + MovieContract.MovieEntry.COLUMN_MOVIE_NAME + " TEXT NOT NULL,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL,"
                 + MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " REAL NOT NULL,"
-                + MovieContract.MovieEntry.COLUMN_MOVIE_VOTE + " REAL NOT NULL);";
+                + MovieContract.MovieEntry.COLUMN_MOVIE_VOTE + " REAL NOT NULL,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_TRAILER + " TEXT,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_REVIEW + " TEXT,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP + " TEXT,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE + " TEXT,"
+                + MovieContract.MovieEntry.COLUMN_GENRES + " TEXT,"
+                + MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES + " INTEGER DEFAULT 0);";
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
     }

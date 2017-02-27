@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.example.dell.moviesapp.BuildConfig;
 import com.example.dell.moviesapp.R;
+import com.example.dell.moviesapp.Utilities;
 import com.example.dell.moviesapp.data.MovieContract;
 
 import org.json.JSONArray;
@@ -129,12 +130,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         final String RESULTS = "results";
         final String MOVIE_ID = "id";
-        final String POPULARITY = "popularity";
-        final String POSTER_PATH = "poster_path";
         final String TITLE = "original_title";
+        final String POPULARITY = "popularity";
         final String RATING = "vote_average";
+        final String POSTER_PATH = "poster_path";
         final String RELEASE_DATE = "release_date";
         final String PLOT = "overview";
+        final String BACKDROP = "backdrop_path";
+        final String CERTIFICATION = "adult";
 
         try {
             JSONObject movieJson = new JSONObject(moviesJsonStr);
@@ -148,21 +151,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 JSONObject curResult = resultsArray.getJSONObject(i);
 
                 double id = curResult.getDouble(MOVIE_ID);
-                String name = curResult.getString(TITLE);
-                double popularity = curResult.getDouble(POPULARITY);
-                double vote = curResult.getDouble(RATING);
 
                 String getURL = curResult.getString(POSTER_PATH);
                 String posterPath = BASE_POSTER_URL + getURL;
+
+                String name = curResult.getString(TITLE);
+                String overview = curResult.getString(PLOT);
+                String date = curResult.getString(RELEASE_DATE);
+
+                double popularity = curResult.getDouble(POPULARITY);
+                double vote = curResult.getDouble(RATING);
+
+                String backdrop_path = curResult.getString(BACKDROP);
+                String certi = curResult.getString(CERTIFICATION);
+
+                StringBuilder genreName = new StringBuilder("");
+
+                JSONArray genreArray = curResult.getJSONArray("genre_ids");
+                for (int j = 0; j < genreArray.length(); j++) {
+                    double genreId = genreArray.getDouble(j);
+                    String gname = Utilities.genreName(genreId);
+
+                    if(j == genreArray.length() - 1) {
+                        genreName.append(gname + ".");
+                    }else {
+                        genreName.append(gname + ", ");
+                    }
+                }
 
                 //add data to in Vector
                 ContentValues movieValues = new ContentValues();
 
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, id);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, name);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER, posterPath);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, name);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, overview);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, date);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY, popularity);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE, vote);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP, backdrop_path);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
 
                 cVVector.add(movieValues);
             }
@@ -174,6 +203,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
             }
             Log.e(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
+
         }
         catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

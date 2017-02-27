@@ -31,8 +31,10 @@ public class MainActivity extends AppCompatActivity
     private static final String LOG_TAG = "MainActivity";
 
     Toolbar toolbar;
+
     private String mUsername;
     private String mPhotoUrl;
+
     private String sorting = "popular";
 
     private GoogleApiClient mGoogleApiClient;
@@ -86,22 +88,13 @@ public class MainActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
 
-        GridFragment popular = new GridFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(getString(R.string.fragment_data_key), "popular");
-        popular.setArguments(bundle);
+        PopularFragment popular = new PopularFragment();
         adapter.addFragment(popular, "Popular");
 
-        GridFragment rated = new GridFragment();
-        bundle = new Bundle();
-        bundle.putString(getString(R.string.fragment_data_key), "top_rated");
-        rated.setArguments(bundle);
+        PopularFragment rated = new PopularFragment();
         adapter.addFragment(rated, "Top Rated");
 
-        GridFragment favourite = new GridFragment();
-        bundle = new Bundle();
-        bundle.putString(getString(R.string.fragment_data_key), "favourites");
-        favourite.setArguments(bundle);
+        PopularFragment favourite = new PopularFragment();
         adapter.addFragment(favourite, "Favourites");
 
         viewPager.setAdapter(adapter);

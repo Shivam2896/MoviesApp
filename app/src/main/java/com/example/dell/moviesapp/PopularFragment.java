@@ -19,7 +19,7 @@ import com.example.dell.moviesapp.data.MovieContract;
  * Created by DELL on 22-Feb-17.
  */
 
-public class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class PopularFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
 
@@ -29,8 +29,16 @@ public class GridFragment extends Fragment implements LoaderManager.LoaderCallba
             MovieContract.MovieEntry.COLUMN_MOVIE_ID,
             MovieContract.MovieEntry.COLUMN_MOVIE_POSTER,
             MovieContract.MovieEntry.COLUMN_MOVIE_NAME,
+            MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW,
+            MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY,
-            MovieContract.MovieEntry.COLUMN_MOVIE_VOTE
+            MovieContract.MovieEntry.COLUMN_MOVIE_VOTE,
+            MovieContract.MovieEntry.COLUMN_MOVIE_TRAILER,
+            MovieContract.MovieEntry.COLUMN_MOVIE_REVIEW,
+            MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP,
+            MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE,
+            MovieContract.MovieEntry.COLUMN_GENRES,
+            MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
     };
 
     static final int COL_ID = 0;
@@ -43,9 +51,10 @@ public class GridFragment extends Fragment implements LoaderManager.LoaderCallba
     static final int COL_MOVIE_VOTE = 7;
     static final int COL_MOVIE_TRAILER = 8;
     static final int COL_MOVIE_REVIEW = 9;
-    static final int COL_MOVIE_FAVORITES = 10;
-
-    public String sort_by;
+    static final int COL_MOVIE_BACKDROP = 10;
+    static final int COL_MOVIE_CERTIFICATE = 11;
+    static final int COL_GENRES = 12;
+    static final int COL_MOVIE_FAVORITES = 13;
 
     private GridView gridView;
     private ImageAdapter imageAdapter;
@@ -54,11 +63,6 @@ public class GridFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.grid_view, container, false);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            sort_by = bundle.getString(getContext().getString(R.string.fragment_data_key), null);
-        }
 
         gridView = (GridView) view.findViewById(R.id.grid_view);
         imageAdapter = new ImageAdapter(getActivity(), null, 0);
@@ -77,7 +81,6 @@ public class GridFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
-
         Uri movieUri = MovieContract.MovieEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
