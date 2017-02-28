@@ -19,6 +19,8 @@ public class MovieContract {
     public static final String PATH_REVIEW = "review";
     public static final String PATH_TRAILERS = "trailers";
     public static final String PATH_FAVORITE = "favorite";
+    public static final String PATH_MOVIE_POPULAR = "popular";
+    public static final String PATH_MOVIE_RATED = "rated";
 
     public static final class MovieEntry implements BaseColumns {
 
@@ -44,8 +46,8 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_BACKDROP = "backdrop_path";
         public static final String COLUMN_MOVIE_CERTIFICATE = "adult";
         public static final String COLUMN_GENRES = "genre_ids";
+        public static final String COLUMN_TABS = "tab_display";
         public static final String COLUMN_MOVIE_FAVORITES = "favorites";
-
 
         public static Uri buildMovieUri (long id){
             return ContentUris.withAppendedId(CONTENT_URI,id);
@@ -72,6 +74,16 @@ public class MovieContract {
 
         public static Long getMovieIdFromUri(Uri uri){
             return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static Uri buildMoviePopular()
+        {
+            return  CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_POPULAR).build();
+        }
+
+        public static Uri buildMovieRated()
+        {
+            return  CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_RATED).build();
         }
     }
 }

@@ -38,6 +38,7 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
             MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP,
             MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE,
             MovieContract.MovieEntry.COLUMN_GENRES,
+            MovieContract.MovieEntry.COLUMN_TABS,
             MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
     };
 
@@ -54,7 +55,8 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
     static final int COL_MOVIE_BACKDROP = 10;
     static final int COL_MOVIE_CERTIFICATE = 11;
     static final int COL_GENRES = 12;
-    static final int COL_MOVIE_FAVORITES = 13;
+    static final int COL_TABS = 13;
+    static final int COL_MOVIE_FAVORITES = 14;
 
     private GridView gridView;
     private ImageAdapter imageAdapter;
@@ -81,7 +83,7 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
-        Uri movieUri = MovieContract.MovieEntry.CONTENT_URI;
+        Uri movieUri = MovieContract.MovieEntry.buildMoviePopular();
 
         return new CursorLoader(getActivity(),
                 movieUri,

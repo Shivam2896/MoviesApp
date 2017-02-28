@@ -192,6 +192,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP, backdrop_path);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_TABS, 0);
 
                 cVVector.add(movieValues);
             }

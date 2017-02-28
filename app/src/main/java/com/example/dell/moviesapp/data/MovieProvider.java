@@ -25,6 +25,8 @@ public class MovieProvider extends ContentProvider {
     static final int MOVIE_ID_REVIEW = 104;
     static final int MOVIE_ID_TRAILER = 105;
     static final int MOVIE_ID_FAVORITE = 106;
+    static final int MOVIE_POPULAR = 107;
+    static final int MOVIE_RATED = 108;
 
     static UriMatcher buildUriMatcher() {
 
@@ -38,6 +40,7 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#/" + MovieContract.PATH_REVIEW, MOVIE_ID_REVIEW);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#/" + MovieContract.PATH_TRAILERS, MOVIE_ID_TRAILER);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#/" + MovieContract.PATH_FAVORITE, MOVIE_ID_FAVORITE);
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/" + MovieContract.PATH_MOVIE_POPULAR, MOVIE_POPULAR);
         return matcher;
     }
 
@@ -86,7 +89,14 @@ public class MovieProvider extends ContentProvider {
                 retCursor = getFavoritesCursorByMovieId(mOpenHelper.getReadableDatabase(), MovieContract.MovieEntry.getMovieIdFromUri(uri));
                 break;
             }
-
+            case MOVIE_POPULAR: {
+                retCursor = getCursorByPopular(mOpenHelper.getReadableDatabase(), projection);
+                break;
+            }
+            case MOVIE_RATED: {
+                retCursor = getCursorByRated(mOpenHelper.getReadableDatabase(), projection);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -273,6 +283,30 @@ public class MovieProvider extends ContentProvider {
         Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
                 projection,
                 MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES + " = ?",
+                new String[]{String.valueOf(1)},
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        return cursor;
+    }
+
+    private Cursor getCursorByPopular (SQLiteDatabase database, String[] projection) {
+        Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
+                projection,
+                MovieContract.MovieEntry.COLUMN_TABS + " = ?",
+                new String[]{String.valueOf(0)},
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        return cursor;
+    }
+
+    private Cursor getCursorByRated (SQLiteDatabase database, String[] projection) {
+        Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
+                projection,
+                MovieContract.MovieEntry.COLUMN_TABS + " = ?",
                 new String[]{String.valueOf(1)},
                 null,
                 null,
