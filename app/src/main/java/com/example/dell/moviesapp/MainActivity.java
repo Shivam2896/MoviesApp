@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         PopularFragment popular = new PopularFragment();
         adapter.addFragment(popular, "Popular");
 
-        PopularFragment rated = new PopularFragment();
+        RatedFragment rated = new RatedFragment();
         adapter.addFragment(rated, "Top Rated");
 
         PopularFragment favourite = new PopularFragment();

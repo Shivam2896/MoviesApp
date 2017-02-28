@@ -44,8 +44,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w342/";
 
-    public String sortBy;
-
     // Interval at which to sync with the movies, in seconds.
     // 60 seconds (1 minute) * 60 mins (1 hour) * 24 hours = 1 day
     public static final int SYNC_INTERVAL = 60 * 60 * 24;
@@ -64,32 +62,50 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
+        HttpURLConnection urlConnection2 = null;
+        BufferedReader reader2 = null;
+
         String movieJsonStr ;
+        String movieJsonStr2;
 
         try {
             final String API_KEY = "api_key";
 
             Uri builtUri = Uri.parse(BASE_POPULAR_URL).buildUpon()
-//                    .appendEncodedPath(sortBy)
+                    .appendQueryParameter(API_KEY, BuildConfig.API_KEY)
+                    .build();
+
+            Uri builtUri2 = Uri.parse(BASE_RATED_URL).buildUpon()
                     .appendQueryParameter(API_KEY, BuildConfig.API_KEY)
                     .build();
 
             URL url = new URL(builtUri.toString());
+            URL url2 = new URL(builtUri2.toString());
 
             Log.e(LOG_TAG, "" + url);
+            Log.e(LOG_TAG, "" + url2);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
+
+            urlConnection2 = (HttpURLConnection) url2.openConnection();
+            urlConnection2.setRequestMethod("GET");
+            urlConnection2.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 return;
             }
+            InputStream inputStream2 = urlConnection2.getInputStream();
+            StringBuffer buffer2 = new StringBuffer();
+            if (inputStream2 == null) {
+                return;
+            }
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
-
+            reader2 = new BufferedReader(new InputStreamReader(inputStream2));
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -98,14 +114,28 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 // buffer for debugging.
                 buffer.append(line + "\n");
             }
+            String line2;
+            while ((line2 = reader2.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer2.append(line2 + "\n");
+            }
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
                 return;
             }
+            if (buffer2.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return;
+            }
 
             movieJsonStr = buffer.toString();
+            movieJsonStr2 = buffer2.toString();
+
             Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr);
+            Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr2);
             getMovieDataFromJson(movieJsonStr);
         }
         catch (IOException | JSONException e ) {
