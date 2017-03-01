@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.dell.moviesapp.Fragment.FavouriteFragment;
+import com.example.dell.moviesapp.Fragment.PopularFragment;
+import com.example.dell.moviesapp.Fragment.RatedFragment;
 import com.example.dell.moviesapp.sync.SyncAdapter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;

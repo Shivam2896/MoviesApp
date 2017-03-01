@@ -1,4 +1,4 @@
-package com.example.dell.moviesapp;
+package com.example.dell.moviesapp.Fragment;
 
 
 import android.database.Cursor;
@@ -13,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.example.dell.moviesapp.ImageAdapter;
+import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
 
 /**
  * Created by DELL on 22-Feb-17.
  */
 
-public class RatedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class PopularFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
 
@@ -42,21 +44,21 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
             MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
     };
 
-    static final int COL_ID = 0;
-    static final int COL_MOVIE_ID = 1;
-    static final int COL_MOVIE_POSTER = 2;
-    static final int COL_MOVIE_NAME = 3;
-    static final int COL_MOVIE_OVERVIEW = 4;
-    static final int COL_MOVIE_RELEASE_DATE = 5;
-    static final int COL_MOVIE_POPULARITY = 6;
-    static final int COL_MOVIE_VOTE = 7;
-    static final int COL_MOVIE_TRAILER = 8;
-    static final int COL_MOVIE_REVIEW = 9;
-    static final int COL_MOVIE_BACKDROP = 10;
-    static final int COL_MOVIE_CERTIFICATE = 11;
-    static final int COL_GENRES = 12;
-    static final int COL_TABS = 13;
-    static final int COL_MOVIE_FAVORITES = 14;
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_MOVIE_POSTER = 2;
+    public static final int COL_MOVIE_NAME = 3;
+    public static final int COL_MOVIE_OVERVIEW = 4;
+    public static final int COL_MOVIE_RELEASE_DATE = 5;
+    public static final int COL_MOVIE_POPULARITY = 6;
+    public static final int COL_MOVIE_VOTE = 7;
+    public static final int COL_MOVIE_TRAILER = 8;
+    public static final int COL_MOVIE_REVIEW = 9;
+    public static final int COL_MOVIE_BACKDROP = 10;
+    public static final int COL_MOVIE_CERTIFICATE = 11;
+    public static final int COL_GENRES = 12;
+    public static final int COL_TABS = 13;
+    public static final int COL_MOVIE_FAVORITES = 14;
 
     private GridView gridView;
     private ImageAdapter imageAdapter;
@@ -82,8 +84,8 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_VOTE + " DESC";
-        Uri movieUri = MovieContract.MovieEntry.buildMovieRated();
+        String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
+        Uri movieUri = MovieContract.MovieEntry.buildMoviePopular();
 
         return new CursorLoader(getActivity(),
                 movieUri,

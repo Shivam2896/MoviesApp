@@ -1,4 +1,4 @@
-package com.example.dell.moviesapp;
+package com.example.dell.moviesapp.Fragment;
 
 
 import android.database.Cursor;
@@ -13,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.example.dell.moviesapp.ImageAdapter;
+import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
 
 /**
  * Created by DELL on 22-Feb-17.
  */
 
-public class PopularFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class RatedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
 
@@ -82,8 +84,8 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
-        Uri movieUri = MovieContract.MovieEntry.buildMoviePopular();
+        String sortOrder = MovieContract.MovieEntry.COLUMN_MOVIE_VOTE + " DESC";
+        Uri movieUri = MovieContract.MovieEntry.buildMovieRated();
 
         return new CursorLoader(getActivity(),
                 movieUri,

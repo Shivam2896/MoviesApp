@@ -1,4 +1,4 @@
-package com.example.dell.moviesapp;
+package com.example.dell.moviesapp.Fragment;
 
 
 import android.database.Cursor;
@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.example.dell.moviesapp.ImageAdapter;
+import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
 
 /**
