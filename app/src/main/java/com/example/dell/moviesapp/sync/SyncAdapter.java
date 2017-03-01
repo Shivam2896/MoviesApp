@@ -136,7 +136,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr);
             Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr2);
-            getMovieDataFromJson(movieJsonStr);
+            getMovieDataFromJson(movieJsonStr, movieJsonStr2);
         }
         catch (IOException | JSONException e ) {
             Log.e(LOG_TAG, "Error ", e);
@@ -156,7 +156,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    private void getMovieDataFromJson(String moviesJsonStr) throws JSONException {
+    private void getMovieDataFromJson(String moviesJsonStr, String moviesJsonStr2) throws JSONException {
 
         final String RESULTS = "results";
         final String MOVIE_ID = "id";
@@ -173,8 +173,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             JSONObject movieJson = new JSONObject(moviesJsonStr);
             JSONArray resultsArray = movieJson.getJSONArray(RESULTS);
 
+            JSONObject movieJson2 = new JSONObject(moviesJsonStr2);
+            JSONArray resultsArray2 = movieJson2.getJSONArray(RESULTS);
+
             // Insert the new weather information into the database
-            Vector<ContentValues> cVVector = new Vector<ContentValues>(resultsArray.length());
+            int length = resultsArray.length() + resultsArray2.length();
+            Vector<ContentValues> cVVector = new Vector<ContentValues>(length);
 
             for (int i = 0; i < resultsArray.length(); i++) {
 
@@ -223,6 +227,57 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_TABS, 0);
+
+                cVVector.add(movieValues);
+            }
+
+            for (int i = 0; i < resultsArray2.length(); i++) {
+
+                JSONObject curResult = resultsArray2.getJSONObject(i);
+
+                double id = curResult.getDouble(MOVIE_ID);
+
+                String getURL = curResult.getString(POSTER_PATH);
+                String posterPath = BASE_POSTER_URL + getURL;
+
+                String name = curResult.getString(TITLE);
+                String overview = curResult.getString(PLOT);
+                String date = curResult.getString(RELEASE_DATE);
+
+                double popularity = curResult.getDouble(POPULARITY);
+                double vote = curResult.getDouble(RATING);
+
+                String backdrop_path = curResult.getString(BACKDROP);
+                String certi = curResult.getString(CERTIFICATION);
+
+                StringBuilder genreName = new StringBuilder("");
+
+                JSONArray genreArray = curResult.getJSONArray("genre_ids");
+                for (int j = 0; j < genreArray.length(); j++) {
+                    double genreId = genreArray.getDouble(j);
+                    String gname = Utilities.genreName(genreId);
+
+                    if(j == genreArray.length() - 1) {
+                        genreName.append(gname + ".");
+                    }else {
+                        genreName.append(gname + ", ");
+                    }
+                }
+
+                //add data to in Vector
+                ContentValues movieValues = new ContentValues();
+
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, id);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER, posterPath);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, name);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, overview);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, date);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY, popularity);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE, vote);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP, backdrop_path);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_TABS, 1);
 
                 cVVector.add(movieValues);
             }
