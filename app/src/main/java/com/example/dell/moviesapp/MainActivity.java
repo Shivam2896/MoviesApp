@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         RatedFragment rated = new RatedFragment();
         adapter.addFragment(rated, "Top Rated");
 
-        PopularFragment favourite = new PopularFragment();
+        FavouriteFragment favourite = new FavouriteFragment();
         adapter.addFragment(favourite, "Favourites");
 
         viewPager.setAdapter(adapter);
