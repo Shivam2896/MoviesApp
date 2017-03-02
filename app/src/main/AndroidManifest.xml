@@ -19,34 +19,39 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".SignInActivity" />
 
         <provider
-            android:authorities="com.example.dell.moviesapp"
             android:name=".data.MovieProvider"
+            android:authorities="com.example.dell.moviesapp"
             android:exported="false"
-            android:syncable="true"/>
+            android:syncable="true" />
 
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
 
         <!-- The SyncAdapter service -->
-        <service android:name=".sync.SyncService"
+        <service
+            android:name=".sync.SyncService"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
 
+        <activity android:name=".DetailActivity"></activity>
     </application>
+
 </manifest>

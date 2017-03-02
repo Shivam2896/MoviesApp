@@ -1,6 +1,7 @@
 package com.example.dell.moviesapp.Fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.dell.moviesapp.DetailActivity;
 import com.example.dell.moviesapp.ImageAdapter;
 import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
@@ -72,6 +75,14 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
         imageAdapter = new ImageAdapter(getActivity(), null, 0);
 
         gridView.setAdapter(imageAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
