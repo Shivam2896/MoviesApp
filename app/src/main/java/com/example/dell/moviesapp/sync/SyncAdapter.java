@@ -305,7 +305,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-    public static void initializeSyncAdapter (Context context, String sorting) {
+    public static void initializeSyncAdapter (Context context) {
         getSyncAccount(context);
     }
 

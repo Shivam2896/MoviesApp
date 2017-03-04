@@ -1,9 +1,7 @@
 package com.example.dell.moviesapp;
 
-import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -12,11 +10,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (savedInstanceState == null) {
+            Bundle bundle = getIntent().getExtras();
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(bundle);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transperent)); // transperent color = #00000000
-
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_detail, fragment)
+                    .commit();
+        }
     }
 }

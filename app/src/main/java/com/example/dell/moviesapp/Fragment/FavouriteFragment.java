@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.dell.moviesapp.DetailActivity;
+import com.example.dell.moviesapp.DetailFragment;
 import com.example.dell.moviesapp.ImageAdapter;
 import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
@@ -67,6 +68,7 @@ public class FavouriteFragment extends Fragment implements LoaderManager.LoaderC
     private GridView gridView;
     private ImageAdapter imageAdapter;
     private TextView emptyMovie;
+    private Uri movieUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +85,14 @@ public class FavouriteFragment extends Fragment implements LoaderManager.LoaderC
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), DetailActivity.class);
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+                if (cursor != null) {
+                    movieUri = MovieContract.MovieEntry.buildMovieUri(cursor.getLong(COL_MOVIE_ID));
+                }
+
+                Intent intent = new Intent(getContext(), DetailActivity.class)
+                        .putExtra(DetailFragment.DETAIL_URI, movieUri);
                 startActivity(intent);
             }
         });

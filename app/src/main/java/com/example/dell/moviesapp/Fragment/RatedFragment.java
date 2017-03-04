@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.dell.moviesapp.DetailActivity;
+import com.example.dell.moviesapp.DetailFragment;
 import com.example.dell.moviesapp.ImageAdapter;
 import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
@@ -65,6 +66,7 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private GridView gridView;
     private ImageAdapter imageAdapter;
+    private Uri movieUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +81,14 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), DetailActivity.class);
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+                if (cursor != null) {
+                    movieUri = MovieContract.MovieEntry.buildMovieUri(cursor.getLong(COL_MOVIE_ID));
+                }
+
+                Intent intent = new Intent(getContext(), DetailActivity.class)
+                        .putExtra(DetailFragment.DETAIL_URI, movieUri);
                 startActivity(intent);
             }
         });

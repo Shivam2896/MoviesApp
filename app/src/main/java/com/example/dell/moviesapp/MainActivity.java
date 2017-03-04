@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity
     private String mUsername;
     private String mPhotoUrl;
 
-    private String sorting = "popular";
-
     private GoogleApiClient mGoogleApiClient;
 
     // Firebase instance variables
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        SyncAdapter.initializeSyncAdapter(this, sorting);
+        SyncAdapter.initializeSyncAdapter(this);
     }
 
     // Add Fragments to Tabs
