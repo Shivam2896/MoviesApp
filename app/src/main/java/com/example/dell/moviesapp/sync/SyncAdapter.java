@@ -168,6 +168,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String PLOT = "overview";
         final String BACKDROP = "backdrop_path";
         final String CERTIFICATION = "adult";
+        final String LANGUAGE = "original_language";
 
         try {
             JSONObject movieJson = new JSONObject(moviesJsonStr);
@@ -196,8 +197,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = curResult.getString(BACKDROP);
+                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
+
+                String language = Utilities.getLanguage(curResult.getString(LANGUAGE));
 
                 StringBuilder genreName = new StringBuilder("");
 
@@ -227,6 +230,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_TABS, 0);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_LANGUAGE, language);
 
                 cVVector.add(movieValues);
             }
@@ -247,8 +251,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = curResult.getString(BACKDROP);
+                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
+
+                String language = Utilities.getLanguage(curResult.getString(LANGUAGE));
 
                 StringBuilder genreName = new StringBuilder("");
 
@@ -278,6 +284,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE, certi);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, String.valueOf(genreName));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_TABS, 1);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_LANGUAGE, language);
 
                 cVVector.add(movieValues);
             }

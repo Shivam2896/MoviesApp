@@ -47,6 +47,7 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_CERTIFICATE = "adult";
         public static final String COLUMN_GENRES = "genre_ids";
         public static final String COLUMN_TABS = "tab_display";
+        public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_MOVIE_FAVORITES = "favorites";
 
         public static Uri buildMovieUri (long id){

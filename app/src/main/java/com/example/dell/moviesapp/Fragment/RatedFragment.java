@@ -45,6 +45,7 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
             MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE,
             MovieContract.MovieEntry.COLUMN_GENRES,
             MovieContract.MovieEntry.COLUMN_TABS,
+            MovieContract.MovieEntry.COLUMN_LANGUAGE,
             MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
     };
 
@@ -62,7 +63,8 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
     static final int COL_MOVIE_CERTIFICATE = 11;
     static final int COL_GENRES = 12;
     static final int COL_TABS = 13;
-    static final int COL_MOVIE_FAVORITES = 14;
+    public static final int COL_LANGUAGE = 14;
+    public static final int COL_MOVIE_FAVORITES = 15;
 
     private GridView gridView;
     private ImageAdapter imageAdapter;

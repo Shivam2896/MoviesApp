@@ -37,6 +37,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 + MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE + " TEXT,"
                 + MovieContract.MovieEntry.COLUMN_GENRES + " TEXT,"
                 + MovieContract.MovieEntry.COLUMN_TABS + " INTEGER,"
+                + MovieContract.MovieEntry.COLUMN_LANGUAGE + " TEXT,"
                 + MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES + " INTEGER DEFAULT 0);";
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);

@@ -1,27 +1,86 @@
 package com.example.dell.moviesapp;
 
-import android.support.v4.app.Fragment;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.dell.moviesapp.data.MovieContract;
+import com.squareup.picasso.Picasso;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "Detail_Uri";
 
+    private static final int DETAIL_LOADER = 0;
+
+    private static final String[] DETAIL_COLUMNS = {
+
+            MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry.COLUMN_MOVIE_POSTER,
+            MovieContract.MovieEntry.COLUMN_MOVIE_NAME,
+            MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW,
+            MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE,
+            MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY,
+            MovieContract.MovieEntry.COLUMN_MOVIE_VOTE,
+            MovieContract.MovieEntry.COLUMN_MOVIE_TRAILER,
+            MovieContract.MovieEntry.COLUMN_MOVIE_REVIEW,
+            MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP,
+            MovieContract.MovieEntry.COLUMN_MOVIE_CERTIFICATE,
+            MovieContract.MovieEntry.COLUMN_GENRES,
+            MovieContract.MovieEntry.COLUMN_TABS,
+            MovieContract.MovieEntry.COLUMN_LANGUAGE,
+            MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
+    };
+
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_MOVIE_POSTER = 2;
+    public static final int COL_MOVIE_NAME = 3;
+    public static final int COL_MOVIE_OVERVIEW = 4;
+    public static final int COL_MOVIE_RELEASE_DATE = 5;
+    public static final int COL_MOVIE_POPULARITY = 6;
+    public static final int COL_MOVIE_VOTE = 7;
+    public static final int COL_MOVIE_TRAILER = 8;
+    public static final int COL_MOVIE_REVIEW = 9;
+    public static final int COL_MOVIE_BACKDROP = 10;
+    public static final int COL_MOVIE_CERTIFICATE = 11;
+    public static final int COL_GENRES = 12;
+    public static final int COL_TABS = 13;
+    public static final int COL_LANGUAGE = 14;
+    public static final int COL_MOVIE_FAVORITES = 15;
+
     Uri mUri;
 
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
+
+    ImageView backdrop;
+    ImageView poster;
+    TextView title;
+    TextView rating;
+    TextView runtime;
+    TextView release_date;
+    TextView language;
+    TextView genre;
+    TextView overview;
+
+    FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,28 +101,129 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         collapsingToolbarLayout = (CollapsingToolbarLayout) rootView.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transperent));
 
+        backdrop = (ImageView) rootView.findViewById(R.id.backdrop);
+        poster = (ImageView) rootView.findViewById(R.id.poster);
+        title = (TextView) rootView.findViewById(R.id.title);
+        rating = (TextView) rootView.findViewById(R.id.rating);
+        runtime = (TextView) rootView.findViewById(R.id.runtime);
+        release_date = (TextView) rootView.findViewById(R.id.release_date);
+        language = (TextView) rootView.findViewById(R.id.language);
+        genre = (TextView) rootView.findViewById(R.id.genre);
+        overview = (TextView) rootView.findViewById(R.id.overview);
+
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Changes will apply after you reopen App", Toast.LENGTH_LONG).show();
+                updateFavourite();
+            }
+        });
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("Loader", "onCreateLoader called");
+        if(null != mUri) {
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    DETAIL_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
         return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        if (data != null && data.moveToFirst()) {
+            collapsingToolbarLayout.setTitle(data.getString(COL_MOVIE_NAME));
+
+            title.setText(data.getString(COL_MOVIE_NAME));
+
+            Picasso.with(getContext())
+                    .load(data.getString(COL_MOVIE_POSTER))
+                    .into(poster);
+
+            Picasso.with(getContext())
+                    .load(data.getString(COL_MOVIE_BACKDROP))
+                    .into(backdrop);
+
+            rating.setText(data.getString(COL_MOVIE_VOTE));
+
+            release_date.setText(data.getString(COL_MOVIE_RELEASE_DATE));
+
+            language.setText(data.getString(COL_LANGUAGE));
+
+            genre.setText(data.getString(COL_GENRES));
+
+            overview.setText(data.getString(COL_MOVIE_OVERVIEW));
+
+            if (data.getInt(COL_MOVIE_FAVORITES) == 1) {
+                fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            }
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private Long getMovieId(Uri uri) {
+        return MovieContract.MovieEntry.getMovieIdFromUri(uri);
+    }
+
+    private void updateFavourite() {
+        Long movieId = getMovieId(mUri);
+
+        Cursor cursor = getActivity().getContentResolver().query(MovieContract.MovieEntry.buildMovieFavoriteWithIDUri(movieId),
+                DETAIL_COLUMNS,
+                null,
+                null,
+                null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int favorite = cursor.getInt(0);
+            ContentValues cv = new ContentValues();
+
+            switch (favorite) {
+                case 0:
+                    //if not favorite change star to black and update data
+                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES, 1);
+                    getActivity().getContentResolver().update(
+                            MovieContract.MovieEntry.buildMovieFavoriteWithIDUri(movieId),
+                            cv,
+                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                            new String[]{Long.toString(movieId)}
+                    );
+                    break;
+
+                case 1:
+                    fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES, 0);
+                    getActivity().getContentResolver().update(
+                            MovieContract.MovieEntry.buildMovieFavoriteWithIDUri(movieId),
+                            cv,
+                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                            new String[]{Long.toString(movieId)}
+                    );
+                    break;
+            }
+        }
     }
 }

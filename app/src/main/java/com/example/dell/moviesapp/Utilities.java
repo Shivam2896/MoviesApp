@@ -50,4 +50,29 @@ public class Utilities {
         }
         return name;
     }
+
+    public static String getLanguage (String lang) {
+        String name = "";
+
+        if (lang.equals("en")) {
+            name = "English";
+        } else if (lang.equals("ja")) {
+            name = "Japanese";
+        } else if (lang.equals("ar")) {
+            name = "Arabic";
+        } else if (lang.equals("zh")) {
+            name = "Chinese";
+        } else if (lang.equals("fr")) {
+            name = "French";
+        } else if (lang.equals("de")) {
+            name = "German";
+        } else if (lang.equals("hi")) {
+            name = "Hindi";
+        } else if (lang.equals("it")) {
+            name = "Italian";
+        } else if (lang.equals("es")) {
+            name = "Spanish";
+        }
+        return name;
+    }
 }
