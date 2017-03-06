@@ -11,6 +11,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dell.moviesapp.Adapter.Adapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
@@ -80,6 +83,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     TextView genre;
     TextView overview;
 
+    RecyclerView cast;
+
     FloatingActionButton fab;
 
     @Override
@@ -110,6 +115,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         language = (TextView) rootView.findViewById(R.id.language);
         genre = (TextView) rootView.findViewById(R.id.genre);
         overview = (TextView) rootView.findViewById(R.id.overview);
+
+        cast = (RecyclerView) rootView.findViewById(R.id.cast_recycler);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +181,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             } else {
                 fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
+
+            Adapter adapter = new Adapter();
+            cast.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            cast.setHasFixedSize(true);
+            cast.setNestedScrollingEnabled(false);
+            cast.setAdapter(adapter);
         }
     }
 
