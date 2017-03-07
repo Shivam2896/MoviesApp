@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +22,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dell.moviesapp.Adapter.Adapter;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.dell.moviesapp.Adapter.CastAdapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "Detail_Uri";
 
     private static final int DETAIL_LOADER = 0;
+
+    private String mCast;
 
     private static final String[] DETAIL_COLUMNS = {
 
@@ -48,6 +59,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.MovieEntry.COLUMN_GENRES,
             MovieContract.MovieEntry.COLUMN_TABS,
             MovieContract.MovieEntry.COLUMN_LANGUAGE,
+            MovieContract.MovieEntry.COLUMN_CAST,
             MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES
     };
 
@@ -66,7 +78,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_GENRES = 12;
     public static final int COL_TABS = 13;
     public static final int COL_LANGUAGE = 14;
-    public static final int COL_MOVIE_FAVORITES = 15;
+    public static final int COL_CAST = 15;
+    public static final int COL_MOVIE_FAVORITES = 16;
 
     Uri mUri;
 
@@ -96,6 +109,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+            DownloadJson();
         }
 
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
@@ -154,6 +168,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst()) {
+            mCast = data.getString(COL_CAST);
+
             collapsingToolbarLayout.setTitle(data.getString(COL_MOVIE_NAME));
 
             title.setText(data.getString(COL_MOVIE_NAME));
@@ -182,11 +198,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
 
-            Adapter adapter = new Adapter();
-            cast.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            cast.setHasFixedSize(true);
-            cast.setNestedScrollingEnabled(false);
-            cast.setAdapter(adapter);
+            if (mCast == null) {
+                cast.setVisibility(View.GONE);
+            } else {
+                cast.setVisibility(View.VISIBLE);
+                CastAdapter adapter = new CastAdapter();
+                cast.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                cast.setHasFixedSize(true);
+                cast.setNestedScrollingEnabled(false);
+                cast.setAdapter(adapter);
+
+            }
         }
     }
 
@@ -238,5 +260,66 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     break;
             }
         }
+    }
+
+    private void DownloadJson () {
+        final RequestQueue mRequestQueue;
+
+        final String REVIEW_TAG = "review";
+        final String TRAILERS_TAG = "trailers";
+        final String CAST_TAG = "cast";
+
+        final Long movieID = getMovieId(mUri);
+
+        String reviewUri = "http://api.themoviedb.org/3/movie/" + movieID + "/reviews?api_key=" + BuildConfig.API_KEY;
+        String trailersUri = "http://api.themoviedb.org/3/movie/" + movieID + "/videos?api_key=" + BuildConfig.API_KEY;
+        String castUri = "http://api.themoviedb.org/3/movie/" + movieID + "/credits?api_key=" + BuildConfig.API_KEY;
+
+        mRequestQueue = Volley.newRequestQueue(getContext());
+
+        JsonObjectRequest castRequest = new JsonObjectRequest
+                (Request.Method.GET, castUri, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSON", response.toString());
+                        Log.d("JSON", "Download complete!");
+                        mRequestQueue.cancelAll(CAST_TAG);
+
+                        ContentValues cv = new ContentValues();
+                        cv.put(MovieContract.MovieEntry.COLUMN_CAST, response.toString());
+
+                        if (mCast == null) {
+                            try {
+                                getActivity().getContentResolver().update(
+                                        MovieContract.MovieEntry.buildMovieCastWithIDUri(movieID),
+                                        cv,
+                                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                                        new String[]{Long.toString(movieID)}
+                                );
+                            }catch (NullPointerException e){
+                                Log.d("Movie Provider","can't get data");
+                            }
+                        } else {
+                            Log.d("JSON", "cast not null");
+                            Log.d("JSON", mCast);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        mRequestQueue.cancelAll(CAST_TAG);
+
+
+                    }
+                });
+
+        castRequest.setTag(CAST_TAG);
+
+        mRequestQueue.add(castRequest);
+
     }
 }

@@ -11,7 +11,7 @@ import com.example.dell.moviesapp.R;
  * Created by DELL on 06-Mar-17.
  */
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
 
 
     @Override

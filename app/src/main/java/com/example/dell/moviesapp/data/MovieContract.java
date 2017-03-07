@@ -21,6 +21,7 @@ public class MovieContract {
     public static final String PATH_FAVORITE = "favorite";
     public static final String PATH_MOVIE_POPULAR = "popular";
     public static final String PATH_MOVIE_RATED = "rated";
+    public static final String PATH_MOVIE_CAST = "cast";
 
     public static final class MovieEntry implements BaseColumns {
 
@@ -48,6 +49,7 @@ public class MovieContract {
         public static final String COLUMN_GENRES = "genre_ids";
         public static final String COLUMN_TABS = "tab_display";
         public static final String COLUMN_LANGUAGE = "language";
+        public static final String COLUMN_CAST = "cast";
         public static final String COLUMN_MOVIE_FAVORITES = "favorites";
 
         public static Uri buildMovieUri (long id){
@@ -85,6 +87,11 @@ public class MovieContract {
         public static Uri buildMovieRated()
         {
             return  CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_RATED).build();
+        }
+
+        public static Uri buildMovieCastWithIDUri(long id)
+        {
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(id)).appendPath((PATH_MOVIE_CAST)).build();
         }
     }
 }

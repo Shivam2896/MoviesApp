@@ -27,6 +27,7 @@ public class MovieProvider extends ContentProvider {
     static final int MOVIE_ID_FAVORITE = 106;
     static final int MOVIE_POPULAR = 107;
     static final int MOVIE_RATED = 108;
+    static final int MOVIE_ID_CAST = 109;
 
     static UriMatcher buildUriMatcher() {
 
@@ -42,6 +43,8 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#/" + MovieContract.PATH_FAVORITE, MOVIE_ID_FAVORITE);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/" + MovieContract.PATH_MOVIE_POPULAR, MOVIE_POPULAR);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/" + MovieContract.PATH_MOVIE_RATED, MOVIE_RATED);
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/#/" + MovieContract.PATH_MOVIE_CAST, MOVIE_ID_CAST);
+
         return matcher;
     }
 
@@ -98,6 +101,11 @@ public class MovieProvider extends ContentProvider {
                 retCursor = getCursorByRated(mOpenHelper.getReadableDatabase(), projection);
                 break;
             }
+            case MOVIE_ID_CAST: {
+                retCursor = getCastCursorByMovieId(mOpenHelper.getReadableDatabase(), MovieContract.MovieEntry.getMovieIdFromUri(uri));
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -184,6 +192,9 @@ public class MovieProvider extends ContentProvider {
             case MOVIE_ID_FAVORITE:
                 rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
+            case MOVIE_ID_CAST:
+                rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME,values,selection,selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -259,6 +270,18 @@ public class MovieProvider extends ContentProvider {
     private Cursor getTrailersCursorByMovieId(SQLiteDatabase database, Long movieID) {
         Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
                 new String[]{MovieContract.MovieEntry.COLUMN_MOVIE_TRAILER},
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+                new String[]{String.valueOf(movieID)},
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        return cursor;
+    }
+
+    private Cursor getCastCursorByMovieId(SQLiteDatabase database, Long movieID) {
+        Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
+                new String[]{MovieContract.MovieEntry.COLUMN_CAST},
                 MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
                 new String[]{String.valueOf(movieID)},
                 null,
