@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.dell.moviesapp.Adapter.CastAdapter;
+import com.example.dell.moviesapp.Adapter.CrewAdapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
@@ -39,8 +40,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final String DETAIL_URI = "Detail_Uri";
 
     private static final int DETAIL_LOADER = 0;
-
-    private String mCast;
 
     private static final String[] DETAIL_COLUMNS = {
 
@@ -97,6 +96,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     TextView overview;
 
     RecyclerView cast;
+    RecyclerView crew;
+    private String castJson;
 
     FloatingActionButton fab;
 
@@ -131,6 +132,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         overview = (TextView) rootView.findViewById(R.id.overview);
 
         cast = (RecyclerView) rootView.findViewById(R.id.cast_recycler);
+        crew = (RecyclerView) rootView.findViewById(R.id.crew_recycler);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +170,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst()) {
-            mCast = data.getString(COL_CAST);
-
             collapsingToolbarLayout.setTitle(data.getString(COL_MOVIE_NAME));
 
             title.setText(data.getString(COL_MOVIE_NAME));
@@ -198,16 +198,21 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
 
-            if (mCast == null) {
+            castJson = data.getString(COL_CAST);
+            if (castJson == null) {
                 cast.setVisibility(View.GONE);
+                crew.setVisibility(View.GONE);
             } else {
                 cast.setVisibility(View.VISIBLE);
-                CastAdapter adapter = new CastAdapter();
-                cast.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-                cast.setHasFixedSize(true);
-                cast.setNestedScrollingEnabled(false);
-                cast.setAdapter(adapter);
+                crew.setVisibility(View.VISIBLE);
 
+                CastAdapter castAdapter = new CastAdapter(castJson, getContext());
+                cast.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                cast.setAdapter(castAdapter);
+
+                CrewAdapter crewAdapter = new CrewAdapter(castJson, getContext());
+                crew.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                crew.setAdapter(crewAdapter);
             }
         }
     }
@@ -289,7 +294,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         ContentValues cv = new ContentValues();
                         cv.put(MovieContract.MovieEntry.COLUMN_CAST, response.toString());
 
-                        if (mCast == null) {
+                        if (castJson == null) {
                             try {
                                 getActivity().getContentResolver().update(
                                         MovieContract.MovieEntry.buildMovieCastWithIDUri(movieID),
@@ -302,7 +307,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                             }
                         } else {
                             Log.d("JSON", "cast not null");
-                            Log.d("JSON", mCast);
+                            Log.d("JSON", castJson);
                         }
 
                     }

@@ -20,49 +20,45 @@ import org.json.JSONObject;
  * Created by DELL on 06-Mar-17.
  */
 
-public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
+public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.ViewHolder> {
 
     Context mContext;
 
     int length;
-    JSONObject castdata;
+    JSONObject crewdata;
 
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w342/";
-
-    String [] cast_photo;
-    String [] cast_name;
-    String [] cast_role;
 
     String [] crew_photo;
     String [] crew_name;
     String [] crew_role;
 
-    public CastAdapter (String castJson, Context context) {
+    public CrewAdapter (String crewJson, Context context) {
 
         mContext = context;
 
-        if (castJson != null) {
+        if (crewJson != null) {
             try {
-                castdata = new JSONObject(castJson);
-                JSONArray results = castdata.getJSONArray("cast");
+                crewdata = new JSONObject(crewJson);
+                JSONArray results = crewdata.getJSONArray("crew");
 
                 length = results.length();
 
-                cast_photo = new String[length];
-                cast_name = new String[length];
-                cast_role = new String[length];
+                crew_photo = new String[length];
+                crew_name = new String[length];
+                crew_role = new String[length];
 
                 for (int i = 0; i < length; i++) {
                     JSONObject curResult = results.getJSONObject(i);
 
                     String path = curResult.getString("profile_path");
                     if (path.equals("null")) {
-                        cast_photo[i] = "null";
+                        crew_photo[i] = "null";
                     } else {
-                        cast_photo[i] = BASE_POSTER_URL + curResult.getString("profile_path");
+                        crew_photo[i] = BASE_POSTER_URL + curResult.getString("profile_path");
                     }
-                    cast_name[i] = curResult.getString("name");
-                    cast_role[i] = curResult.getString("character");
+                    crew_name[i] = curResult.getString("name");
+                    crew_role[i] = curResult.getString("department");
                 }
             } catch (JSONException e) {
                 Log.e("JSON", "Can't get data");
@@ -79,16 +75,16 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        if (cast_photo[position].equals("null")) {
+        if (crew_photo[position].equals("null")) {
             holder.image.setImageResource(R.drawable.no_image);
         } else {
             Picasso.with(mContext)
-                    .load(cast_photo[position])
+                    .load(crew_photo[position])
                     .into(holder.image);
         }
 
-        holder.castname.setText(cast_name[position]);
-        holder.role.setText(cast_role[position]);
+        holder.crewname.setText(crew_name[position]);
+        holder.role.setText(crew_role[position]);
     }
 
     @Override
@@ -99,13 +95,13 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView image;
-        public TextView castname;
+        public TextView crewname;
         public TextView role;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.cast_image);
-            castname = (TextView) itemView.findViewById(R.id.cast_name);
+            crewname = (TextView) itemView.findViewById(R.id.cast_name);
             role = (TextView) itemView.findViewById(R.id.cast_role);
         }
     }
