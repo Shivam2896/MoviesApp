@@ -43,6 +43,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     String BASE_RATED_URL = "http://api.themoviedb.org/3/movie/top_rated/";
 
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w342/";
+    String BASE_BACKDROP_URL = "http://image.tmdb.org/t/p/w500/";
 
     // Interval at which to sync with the movies, in seconds.
     // 60 seconds (1 minute) * 60 mins (1 hour) * 24 hours = 1 day
@@ -197,7 +198,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
+                String backdrop_path = BASE_BACKDROP_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
 
                 String language = Utilities.getLanguage(curResult.getString(LANGUAGE));
@@ -251,7 +252,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
+                String backdrop_path = BASE_BACKDROP_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
 
                 String language = Utilities.getLanguage(curResult.getString(LANGUAGE));

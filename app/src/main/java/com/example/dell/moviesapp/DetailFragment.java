@@ -2,6 +2,9 @@ package com.example.dell.moviesapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,6 +14,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +38,7 @@ import com.example.dell.moviesapp.Adapter.CastAdapter;
 import com.example.dell.moviesapp.Adapter.CrewAdapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -180,7 +187,38 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             Picasso.with(getContext())
                     .load(data.getString(COL_MOVIE_BACKDROP))
-                    .into(backdrop);
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            backdrop.setImageBitmap(bitmap);
+
+                            Palette p = Palette.from(bitmap).generate();
+                            int  mMuted = p.getDarkMutedColor(0xFF333333);
+
+                            int color = Color.rgb(
+                                    (int) (Color.red(mMuted) * 0.7),
+                                    (int) (Color.green(mMuted) * 0.7),
+                                    (int) (Color.blue(mMuted) * 0.7));
+
+                            collapsingToolbarLayout.setContentScrimColor(p.getDarkMutedColor(0xFF333333));
+
+                            Window window = getActivity().getWindow();
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.setStatusBarColor(color);
+
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
 
             rating.setText(data.getString(COL_MOVIE_VOTE));
 
