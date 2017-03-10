@@ -33,10 +33,6 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
     String [] cast_name;
     String [] cast_role;
 
-    String [] crew_photo;
-    String [] crew_name;
-    String [] crew_role;
-
     public CastAdapter (String castJson, Context context) {
 
         mContext = context;

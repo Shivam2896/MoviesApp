@@ -36,6 +36,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.dell.moviesapp.Adapter.CastAdapter;
 import com.example.dell.moviesapp.Adapter.CrewAdapter;
+import com.example.dell.moviesapp.Adapter.VideosAdapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -104,7 +105,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     RecyclerView cast;
     RecyclerView crew;
-    private String castJson;
+    String castJson;
+
+    RecyclerView videos;
+    String videosJson;
+
+    RecyclerView reviews;
+    String reviewJson;
 
     FloatingActionButton fab;
 
@@ -140,6 +147,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         cast = (RecyclerView) rootView.findViewById(R.id.cast_recycler);
         crew = (RecyclerView) rootView.findViewById(R.id.crew_recycler);
+
+        videos = (RecyclerView) rootView.findViewById(R.id.videos_recycler);
+
+        reviews = (RecyclerView) rootView.findViewById(R.id.review_recycler);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +263,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 crew.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 crew.setAdapter(crewAdapter);
             }
+
+            videosJson = data.getString(COL_MOVIE_TRAILER);
+            if (videosJson == null) {
+                videos.setVisibility(View.GONE);
+            } else {
+                videos.setVisibility(View.VISIBLE);
+                VideosAdapter videosAdapter = new VideosAdapter(videosJson, getContext());
+                videos.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                videos.setAdapter(videosAdapter);
+            }
         }
     }
 
@@ -360,9 +381,90 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     }
                 });
 
+        JsonObjectRequest trailerRequest = new JsonObjectRequest
+                (Request.Method.GET, trailersUri, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSON", response.toString());
+                        Log.d("JSON", "Download complete!");
+                        mRequestQueue.cancelAll(TRAILERS_TAG);
+
+                        ContentValues cv = new ContentValues();
+                        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_TRAILER, response.toString());
+
+                        if (videosJson == null) {
+                            try {
+                                getActivity().getContentResolver().update(
+                                        MovieContract.MovieEntry.buildMovieTrailersUri(movieID),
+                                        cv,
+                                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                                        new String[]{Long.toString(movieID)}
+                                );
+                            }catch (NullPointerException e){
+                                Log.d("Movie Provider","can't get data");
+                            }
+                        } else {
+                            Log.d("JSON", "trailer not null");
+                            Log.d("JSON", videosJson);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        mRequestQueue.cancelAll(TRAILERS_TAG);
+                    }
+                });
+
+        JsonObjectRequest reviewRequest = new JsonObjectRequest
+                (Request.Method.GET, reviewUri, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSON", response.toString());
+                        Log.d("JSON", "Download complete!");
+                        mRequestQueue.cancelAll(REVIEW_TAG);
+
+                        ContentValues cv = new ContentValues();
+                        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_REVIEW, response.toString());
+
+                        if (reviewJson == null) {
+                            try {
+                                getActivity().getContentResolver().update(
+                                        MovieContract.MovieEntry.buildMovieReviewUri(movieID),
+                                        cv,
+                                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                                        new String[]{Long.toString(movieID)}
+                                );
+                            }catch (NullPointerException e){
+                                Log.d("Movie Provider","can't get data");
+                            }
+                        } else {
+                            Log.d("JSON", "review not null");
+                            Log.d("JSON", reviewJson);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        mRequestQueue.cancelAll(REVIEW_TAG);
+
+
+                    }
+                });
+
         castRequest.setTag(CAST_TAG);
+        trailerRequest.setTag(TRAILERS_TAG);
+        reviewRequest.setTag(REVIEW_TAG);
 
         mRequestQueue.add(castRequest);
-
+        mRequestQueue.add(trailerRequest);
+        mRequestQueue.add(reviewRequest);
     }
 }

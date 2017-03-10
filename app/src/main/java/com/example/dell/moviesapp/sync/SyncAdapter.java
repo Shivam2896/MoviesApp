@@ -43,13 +43,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     String BASE_RATED_URL = "http://api.themoviedb.org/3/movie/top_rated/";
 
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w342/";
-    String BASE_BACKDROP_URL = "http://image.tmdb.org/t/p/w500/";
 
     // Interval at which to sync with the movies, in seconds.
     // 60 seconds (1 minute) * 60 mins (1 hour) * 24 hours = 1 day
     public static final int SYNC_INTERVAL = 60 * 60 * 24;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -110,33 +108,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
                 buffer.append(line + "\n");
             }
             String line2;
             while ((line2 = reader2.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
                 buffer2.append(line2 + "\n");
             }
 
             if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
                 return;
             }
             if (buffer2.length() == 0) {
-                // Stream was empty.  No point in parsing.
                 return;
             }
 
             movieJsonStr = buffer.toString();
             movieJsonStr2 = buffer2.toString();
 
-            Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr);
-            Log.e(LOG_TAG, "Full JSON String: " + movieJsonStr2);
             getMovieDataFromJson(movieJsonStr, movieJsonStr2);
         }
         catch (IOException | JSONException e ) {
@@ -198,7 +186,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = BASE_BACKDROP_URL + curResult.getString(BACKDROP);
+                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
 
                 String language = Utilities.getLanguage(curResult.getString(LANGUAGE));
@@ -252,7 +240,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 double popularity = curResult.getDouble(POPULARITY);
                 double vote = curResult.getDouble(RATING);
 
-                String backdrop_path = BASE_BACKDROP_URL + curResult.getString(BACKDROP);
+                String backdrop_path = BASE_POSTER_URL + curResult.getString(BACKDROP);
                 String certi = curResult.getString(CERTIFICATION);
 
                 String language = Utilities.getLanguage(curResult.getString(LANGUAGE));
