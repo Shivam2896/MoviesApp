@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/review_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/review_text"
+        android:layout_below="@+id/review_name"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:lines="5"
+        android:ellipsize="end"
+        android:layout_marginTop="15dp"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/read_more"
+        android:layout_below="@+id/review_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="read more"
+        android:textAllCaps="false"
+        android:layout_marginTop="-15dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="240dp"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No review available"
+        android:textSize="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:textColor="@android:color/black"/>
+</RelativeLayout>

@@ -36,6 +36,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.dell.moviesapp.Adapter.CastAdapter;
 import com.example.dell.moviesapp.Adapter.CrewAdapter;
+import com.example.dell.moviesapp.Adapter.ReviewAdapter;
 import com.example.dell.moviesapp.Adapter.VideosAdapter;
 import com.example.dell.moviesapp.data.MovieContract;
 import com.squareup.picasso.Picasso;
@@ -272,6 +273,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 VideosAdapter videosAdapter = new VideosAdapter(videosJson, getContext());
                 videos.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 videos.setAdapter(videosAdapter);
+            }
+
+            reviewJson = data.getString(COL_MOVIE_REVIEW);
+            if (reviewJson == null) {
+                reviews.setVisibility(View.GONE);
+            } else {
+                reviews.setVisibility(View.VISIBLE);
+                ReviewAdapter reviewAdapter = new ReviewAdapter(reviewJson, getContext());
+                reviews.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                reviews.setAdapter(reviewAdapter);
             }
         }
     }
