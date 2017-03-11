@@ -1,6 +1,9 @@
 package com.example.dell.moviesapp.Adapter;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,11 +33,10 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     JSONObject videosData;
 
     String BASE_THUMBNAIL_URL = "http://img.youtube.com/vi/";
-    String BASE_YOUTUBE_URL = "http://www.youtube.com/watch?v=";
 
     String [] video_name;
     String [] video_thumbnail;
-    String [] video_watch;
+    String [] video_id;
 
     public VideosAdapter(String videosJson, Context context) {
 
@@ -49,7 +51,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
                 video_name = new String[length];
                 video_thumbnail = new String[length];
-                video_watch = new String[length];
+                video_id = new String[length];
 
                 for (int i = 0; i < length; i++) {
                     JSONObject curResult = results.getJSONObject(i);
@@ -57,7 +59,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
                     String key = curResult.getString("key");
                     video_name [i] = curResult.getString("name");
                     video_thumbnail[i] = BASE_THUMBNAIL_URL + key + "/maxresdefault.jpg";
-                    video_watch[i] = BASE_YOUTUBE_URL + key;
+                    video_id[i] = key;
                 }
             } catch (JSONException e) {
                 Log.e("JSON", "Can't get data");
@@ -83,14 +85,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         holder.play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                watchVideo(video_watch[position]);
+                watchVideo(video_id[position]);
                 Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void watchVideo (String videoUrl) {
+    public void watchVideo (String videoId) {
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId));
 
+        try {
+            mContext.startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            mContext.startActivity(webIntent);
+        }
     }
     @Override
     public int getItemCount() {
