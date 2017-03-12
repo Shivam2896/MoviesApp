@@ -4,4 +4,13 @@
     <string name="sign_in">Sign In</string>
     <string name="content_authority">com.example.dell.moviesapp</string>
     <string name="sync_account_type">moviesapp.example.com</string>
+    <string name="empty_favourite">No movie marked as favourite.</string>
+    <string name="read_more">read more</string>
+    <string name="empty_review">No review available</string>
+    <string name="overview">Overview</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
+    <string name="reviews">Reviews</string>
+    <string name="trailers">Trailers</string>
+    <string name="ad_unit">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

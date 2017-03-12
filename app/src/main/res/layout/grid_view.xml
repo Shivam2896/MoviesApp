@@ -15,7 +15,7 @@
         android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No movie marked as favourite."
+        android:text="@string/empty_favourite"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
         android:textSize="20dp"

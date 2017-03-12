@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dell.moviesapp.R;
 import com.squareup.picasso.Picasso;
@@ -89,7 +88,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 watchVideo(video_id[position]);
-                Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }

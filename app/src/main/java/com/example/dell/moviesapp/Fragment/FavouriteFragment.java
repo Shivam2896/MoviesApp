@@ -95,7 +95,7 @@ public class FavouriteFragment extends Fragment implements LoaderManager.LoaderC
         gridView.setAdapter(imageAdapter);
 
         interstitialAd = new InterstitialAd(getActivity());
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.ad_unit));
 
         interstitialAd.setAdListener(new AdListener() {
             @Override
