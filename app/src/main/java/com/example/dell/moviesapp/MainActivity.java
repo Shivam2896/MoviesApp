@@ -28,11 +28,15 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String LOG_TAG = "MainActivity";
 
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     private String mUsername;
@@ -49,8 +53,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
         // Adding Toolbar to Main screen
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Setting ViewPager for each Tabs

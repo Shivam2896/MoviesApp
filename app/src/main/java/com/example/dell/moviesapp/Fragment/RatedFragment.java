@@ -21,6 +21,9 @@ import com.example.dell.moviesapp.ImageAdapter;
 import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by DELL on 22-Feb-17.
  */
@@ -66,7 +69,9 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_LANGUAGE = 14;
     public static final int COL_MOVIE_FAVORITES = 15;
 
-    private GridView gridView;
+    @Bind(R.id.grid_view)
+    GridView gridView;
+
     private ImageAdapter imageAdapter;
     private Uri movieUri;
 
@@ -75,7 +80,8 @@ public class RatedFragment extends Fragment implements LoaderManager.LoaderCallb
 
         View view = inflater.inflate(R.layout.grid_view, container, false);
 
-        gridView = (GridView) view.findViewById(R.id.grid_view);
+        ButterKnife.bind(this, view);
+
         imageAdapter = new ImageAdapter(getActivity(), null, 0);
 
         gridView.setAdapter(imageAdapter);

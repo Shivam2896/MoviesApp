@@ -21,6 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by DELL on 10-Mar-17.
  */
@@ -108,15 +111,16 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.thumbnail)
         public ImageView thumbnail;
+        @Bind(R.id.video_name)
         public TextView video_name;
+        @Bind(R.id.play_button)
         public ImageButton play_button;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-            video_name = (TextView) itemView.findViewById(R.id.video_name);
-            play_button = (ImageButton) itemView.findViewById(R.id.play_button);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -12,21 +12,25 @@ import android.widget.TextView;
 import com.example.dell.moviesapp.Fragment.PopularFragment;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by DELL on 26-Feb-17.
  */
 
 public class ImageAdapter extends CursorAdapter {
 
-    private static class ViewHolder {
-        public final ImageView moviePoster;
-        public final TextView movieTitle;
-        public final TextView movieGenre;
+    class ViewHolder {
+        @Bind(R.id.movie_poster)
+        public ImageView moviePoster;
+        @Bind(R.id.movie_name)
+        public TextView movieTitle;
+        @Bind(R.id.movie_genre)
+        public TextView movieGenre;
 
         public ViewHolder(View view){
-            moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
-            movieTitle = (TextView) view.findViewById(R.id.movie_name);
-            movieGenre = (TextView) view.findViewById(R.id.movie_genre);
+            ButterKnife.bind(this, view);
         }
     }
 

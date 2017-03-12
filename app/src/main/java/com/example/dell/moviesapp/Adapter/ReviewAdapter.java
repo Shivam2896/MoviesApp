@@ -17,6 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by DELL on 10-Mar-17.
  */
@@ -97,17 +100,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.review_name)
         public TextView review_name;
+        @Bind(R.id.review_text)
         public TextView review_text;
+        @Bind(R.id.empty)
         public TextView empty;
+        @Bind(R.id.read_more)
         public Button read_more;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            review_name = (TextView) itemView.findViewById(R.id.review_name);
-            review_text = (TextView) itemView.findViewById(R.id.review_text);
-            empty = (TextView) itemView.findViewById(R.id.empty);
-            read_more = (Button) itemView.findViewById(R.id.read_more);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

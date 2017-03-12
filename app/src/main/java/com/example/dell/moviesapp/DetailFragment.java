@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +42,9 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -91,29 +93,46 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     Uri mUri;
 
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
+    @Bind(R.id.backdrop)
     ImageView backdrop;
+    @Bind(R.id.poster)
     ImageView poster;
+    @Bind(R.id.title)
     TextView title;
+    @Bind(R.id.rating)
     TextView rating;
-    TextView runtime;
+    @Bind(R.id.certificate)
+    TextView certificate;
+    @Bind(R.id.release_date)
     TextView release_date;
+    @Bind(R.id.language)
     TextView language;
+    @Bind(R.id.genre)
     TextView genre;
+    @Bind(R.id.overview)
     TextView overview;
 
+    @Bind(R.id.cast_recycler)
     RecyclerView cast;
+    @Bind(R.id.crew_recycler)
     RecyclerView crew;
+
     String castJson;
 
+    @Bind(R.id.videos_recycler)
     RecyclerView videos;
     String videosJson;
 
+    @Bind(R.id.review_recycler)
     RecyclerView reviews;
     String reviewJson;
 
+    @Bind(R.id.fab)
     FloatingActionButton fab;
 
     @Override
@@ -122,38 +141,20 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        ButterKnife.bind(this, rootView);
+
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
             DownloadJson();
         }
 
-        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) rootView.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transperent));
 
-        backdrop = (ImageView) rootView.findViewById(R.id.backdrop);
-        poster = (ImageView) rootView.findViewById(R.id.poster);
-        title = (TextView) rootView.findViewById(R.id.title);
-        rating = (TextView) rootView.findViewById(R.id.rating);
-        runtime = (TextView) rootView.findViewById(R.id.runtime);
-        release_date = (TextView) rootView.findViewById(R.id.release_date);
-        language = (TextView) rootView.findViewById(R.id.language);
-        genre = (TextView) rootView.findViewById(R.id.genre);
-        overview = (TextView) rootView.findViewById(R.id.overview);
-
-        cast = (RecyclerView) rootView.findViewById(R.id.cast_recycler);
-        crew = (RecyclerView) rootView.findViewById(R.id.crew_recycler);
-
-        videos = (RecyclerView) rootView.findViewById(R.id.videos_recycler);
-
-        reviews = (RecyclerView) rootView.findViewById(R.id.review_recycler);
-
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,19 +206,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                             backdrop.setImageBitmap(bitmap);
 
                             Palette p = Palette.from(bitmap).generate();
-                            int  mMuted = p.getDarkMutedColor(0xFF333333);
+                            int  mMuted = p.getMutedColor(0xFF333333);
 
                             int color = Color.rgb(
                                     (int) (Color.red(mMuted) * 0.7),
                                     (int) (Color.green(mMuted) * 0.7),
                                     (int) (Color.blue(mMuted) * 0.7));
 
-                            collapsingToolbarLayout.setContentScrimColor(p.getDarkMutedColor(0xFF333333));
+                            int colorStatus = Color.rgb(
+                                    (int) (Color.red(mMuted) * 0.5),
+                                    (int) (Color.green(mMuted) * 0.5),
+                                    (int) (Color.blue(mMuted) * 0.5));
+
+                            collapsingToolbarLayout.setContentScrimColor(color);
 
                             Window window = getActivity().getWindow();
-                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            window.setStatusBarColor(color);
+                            window.setStatusBarColor(colorStatus);
 
                         }
 
@@ -234,6 +238,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             rating.setText(data.getString(COL_MOVIE_VOTE));
 
+            String certi = data.getString(COL_MOVIE_CERTIFICATE);
+            if (certi.equals("false")) {
+                certificate.setText("UA");
+            } else {
+                certificate.setText("A");
+            }
             release_date.setText(data.getString(COL_MOVIE_RELEASE_DATE));
 
             language.setText(data.getString(COL_LANGUAGE));

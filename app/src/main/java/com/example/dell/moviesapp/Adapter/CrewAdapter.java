@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by DELL on 06-Mar-17.
  */
@@ -94,15 +97,16 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.cast_image)
         public ImageView image;
+        @Bind(R.id.cast_name)
         public TextView crewname;
+        @Bind(R.id.cast_role)
         public TextView role;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.cast_image);
-            crewname = (TextView) itemView.findViewById(R.id.cast_name);
-            role = (TextView) itemView.findViewById(R.id.cast_role);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

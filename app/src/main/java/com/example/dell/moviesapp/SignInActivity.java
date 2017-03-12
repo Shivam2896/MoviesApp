@@ -22,13 +22,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private SignInButton mSignInButton;
+    @Bind(R.id.sign_in_button)
+    SignInButton mSignInButton;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -40,8 +44,7 @@ public class SignInActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // Assign fields
-        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        ButterKnife.bind(this);
 
         // Set click listeners
         mSignInButton.setOnClickListener(this);
