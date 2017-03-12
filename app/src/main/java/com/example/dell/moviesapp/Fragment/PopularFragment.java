@@ -20,6 +20,9 @@ import com.example.dell.moviesapp.DetailFragment;
 import com.example.dell.moviesapp.ImageAdapter;
 import com.example.dell.moviesapp.R;
 import com.example.dell.moviesapp.data.MovieContract;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,6 +78,8 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
     private ImageAdapter imageAdapter;
     private Uri movieUri;
 
+    private InterstitialAd interstitialAd;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -86,6 +91,22 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
 
         gridView.setAdapter(imageAdapter);
 
+        interstitialAd = new InterstitialAd(getActivity());
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+
+                Intent intent = new Intent(getContext(), DetailActivity.class)
+                        .putExtra(DetailFragment.DETAIL_URI, movieUri);
+                startActivity(intent);
+            }
+        });
+
+        requestNewInterstitial();
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,13 +116,26 @@ public class PopularFragment extends Fragment implements LoaderManager.LoaderCal
                     movieUri = MovieContract.MovieEntry.buildMovieUri(cursor.getLong(COL_MOVIE_ID));
                 }
 
-                Intent intent = new Intent(getContext(), DetailActivity.class)
-                        .putExtra(DetailFragment.DETAIL_URI, movieUri);
-                startActivity(intent);
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
+                else {
+                    Intent intent = new Intent(getContext(), DetailActivity.class)
+                            .putExtra(DetailFragment.DETAIL_URI, movieUri);
+                    startActivity(intent);
+                }
             }
         });
 
         return view;
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        interstitialAd.loadAd(adRequest);
     }
 
     @Override
