@@ -13,4 +13,15 @@
     <string name="reviews">Reviews</string>
     <string name="trailers">Trailers</string>
     <string name="ad_unit">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="google_services_error">Google Play Services error.</string>
+    <string name="authentication_failed">Authentication failed.</string>
+    <string name="popular_key">Popular</string>
+    <string name="rated_key">Top Rated</string>
+    <string name="favourite_key">Favourites</string>
+    <string name="favourite_msg">Changes will apply after you reopen App</string>
+    <string name="fab">Mark Favourite</string>
+    <string name="cast_image">Cast Photo</string>
+    <string name="rating">/10</string>
+    <string name="seperate">|</string>
+    <string name="account_info">Account</string>
 </resources>

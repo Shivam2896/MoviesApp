@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="transperent">#00000000</color>
+    <color name="medium_grey">#9E9E9E</color>
 </resources>

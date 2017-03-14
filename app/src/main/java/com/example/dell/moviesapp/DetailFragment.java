@@ -158,7 +158,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Changes will apply after you reopen App", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.favourite_msg), Toast.LENGTH_LONG).show();
                 updateFavourite();
             }
         });

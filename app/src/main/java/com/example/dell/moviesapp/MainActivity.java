@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private String mUsername;
     private String mPhotoUrl;
+    private String mEmail;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
             return;
         } else {
             mUsername = mFirebaseUser.getDisplayName();
+            mEmail = mFirebaseUser.getEmail();
             if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
@@ -94,13 +96,13 @@ public class MainActivity extends AppCompatActivity
         Adapter adapter = new Adapter(getSupportFragmentManager());
 
         PopularFragment popular = new PopularFragment();
-        adapter.addFragment(popular, "Popular");
+        adapter.addFragment(popular, getString(R.string.popular_key));
 
         RatedFragment rated = new RatedFragment();
-        adapter.addFragment(rated, "Top Rated");
+        adapter.addFragment(rated, getString(R.string.rated_key));
 
         FavouriteFragment favourite = new FavouriteFragment();
-        adapter.addFragment(favourite, "Favourites");
+        adapter.addFragment(favourite, getString(R.string.favourite_key));
 
         viewPager.setAdapter(adapter);
     }
@@ -149,10 +151,20 @@ public class MainActivity extends AppCompatActivity
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                 startActivity(new Intent(this, SignInActivity.class));
                 return true;
+
+            case R.id.account_info:
+                accountInfo();
             default : return super.onOptionsItemSelected(item);
         }
     }
 
+    public void accountInfo() {
+        Intent intent = new Intent(getApplicationContext(), AccountInfo.class);
+        intent.putExtra(AccountInfo.user_name, mUsername);
+        intent.putExtra(AccountInfo.user_email, mEmail);
+        intent.putExtra(AccountInfo.user_photo, mPhotoUrl);
+        startActivity(intent);
+    }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(LOG_TAG, "onConnectionFailed:" + connectionResult);

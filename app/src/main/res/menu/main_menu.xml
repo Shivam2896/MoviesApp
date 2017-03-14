@@ -9,4 +9,10 @@
         android:title="@string/sign_out"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/account_info"
+        android:title="Account"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        app:showAsAction="always" />
 </menu>

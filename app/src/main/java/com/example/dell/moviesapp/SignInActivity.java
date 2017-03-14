@@ -111,7 +111,7 @@ public class SignInActivity extends AppCompatActivity implements
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                            Toast.makeText(SignInActivity.this, getString(R.string.authentication_failed),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
@@ -124,6 +124,6 @@ public class SignInActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.google_services_error), Toast.LENGTH_SHORT).show();
     }
 }

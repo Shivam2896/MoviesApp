@@ -19,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".SignInActivity" />
 
         <provider
@@ -52,7 +51,8 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".AccountInfo"></activity>
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@
         android:layout_height="180dp"
         android:src="@drawable/no_image"
         android:scaleType="centerCrop"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginRight="8dp" />
 
     <ImageButton
         android:id="@+id/play_button"
