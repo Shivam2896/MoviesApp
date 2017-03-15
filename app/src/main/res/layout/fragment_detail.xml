@@ -339,7 +339,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         app:srcCompat="@drawable/ic_favorite_border_black_24dp"
