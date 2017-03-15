@@ -1,6 +1,8 @@
 package com.example.dell.moviesapp;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -49,6 +51,8 @@ import butterknife.ButterKnife;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "Detail_Uri";
+
+    public static final String ACTION_DATA_UPDATED = "com.example.dell.moviesapp.ACTION_DATA_UPDATED";
 
     private static final int DETAIL_LOADER = 0;
 
@@ -160,6 +164,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             public void onClick(View v) {
                 Toast.makeText(getContext(), getString(R.string.favourite_msg), Toast.LENGTH_LONG).show();
                 updateFavourite();
+                updateWidget();
             }
         });
         return rootView;
@@ -345,6 +350,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     break;
             }
         }
+    }
+
+    private void updateWidget () {
+        Context context = getContext();
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 
     private void DownloadJson () {
