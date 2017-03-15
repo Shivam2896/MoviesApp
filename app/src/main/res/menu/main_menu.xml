@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/account_info"
-        android:title="Account"
+        android:title="@string/account_info"
         android:icon="@drawable/ic_account_circle_black_24dp"
         app:showAsAction="always" />
 </menu>

@@ -1,4 +1,4 @@
-package com.example.dell.moviesapp.Fragment;
+package com.example.dell.moviesapp.fragment;
 
 
 import android.content.Intent;

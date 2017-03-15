@@ -9,7 +9,8 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:scaleType="centerCrop"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/cast_image"/>
 
     <TextView
         android:id="@+id/cast_name"

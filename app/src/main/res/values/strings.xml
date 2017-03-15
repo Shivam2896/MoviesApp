@@ -24,4 +24,7 @@
     <string name="rating">/10</string>
     <string name="seperate">|</string>
     <string name="account_info">Account</string>
+    <string name="account_avatar">Profile Photo</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="play_trailer">Play Trailer</string>
 </resources>

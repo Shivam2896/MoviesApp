@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dell.moviesapp.Fragment.PopularFragment;
+import com.example.dell.moviesapp.fragment.PopularFragment;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;

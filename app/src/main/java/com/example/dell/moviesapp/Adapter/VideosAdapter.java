@@ -1,4 +1,4 @@
-package com.example.dell.moviesapp.Adapter;
+package com.example.dell.moviesapp.adapter;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
