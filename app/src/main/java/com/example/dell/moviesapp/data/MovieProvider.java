@@ -304,7 +304,8 @@ public class MovieProvider extends ContentProvider {
     }
 
     private Cursor getCursorByFavorites(SQLiteDatabase database,String[] projection) {
-        Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,
+        Cursor cursor = database.query(
+                MovieContract.MovieEntry.TABLE_NAME,
                 projection,
                 MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITES + " = ?",
                 new String[]{String.valueOf(1)},
